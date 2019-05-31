@@ -1,0 +1,16 @@
+-optimizationpasses 5
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-dontpreverify
+-dontshrink
+-keepattributes Signature
+-keepattributes *Annotation*
+-keepattributes Exceptions
+
+-dontwarn android.support.v4.**
+-dontwarn com.loopj.android.http.**
+-dontwarn com.google.gson.**
+-dontwarn com.baidu.**
+-keep class com.baidu.** { *;}
+-dontwarn com.amap.**
+-keep class com.amap.** { *;}
