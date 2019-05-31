@@ -129,7 +129,7 @@ public class MapUtil {
         if (isHuawei()) {
 //            Toast.makeText(context,"这是华为手机",Toast.LENGTH_SHORT).show();
             if (isBaduInstalled) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { //版本高于等于7.0
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //版本高于等于7.0
 //                    Toast.makeText(context,"系统是6.0",Toast.LENGTH_SHORT).show();
 
                     openNaviByIntent(context, para);
@@ -153,7 +153,7 @@ public class MapUtil {
             if (isBaduInstalled) {
 //                Toast.makeText(context,"安装了百度",Toast.LENGTH_SHORT).show();
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { //版本高于等于7.0
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //版本高于等于7.0
                     if (isOpenedMap) {
                         BaiduMapNavigation.openBaiduMapNavi(para, context);
                     } else {
