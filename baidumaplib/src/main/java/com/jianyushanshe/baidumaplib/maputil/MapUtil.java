@@ -144,7 +144,7 @@ public class MapUtil {
                 if (isGaodeInstalled) { //打开高德地图
                     startNativeGaode(context, String.valueOf(baidu2Gao(endla).latitude), String.valueOf(baidu2Gao(endla).longitude), endAdd);
                 } else {
-                    openNaviByWeb(context, para);
+                    openNaviByWeb(baidu2Gao(startla), baidu2Gao(endla), startAdd, endAdd, context);
                     isOpenedMap = true;
 
                 }
@@ -176,7 +176,7 @@ public class MapUtil {
                 if (isGaodeInstalled) { //打开高德地图
                     startNativeGaode(context, String.valueOf(baidu2Gao(endla).latitude), String.valueOf(baidu2Gao(endla).longitude), endAdd);
                 } else {
-                    openNaviByWeb(context, para);
+                    openNaviByWeb(baidu2Gao(startla), baidu2Gao(endla), startAdd, endAdd, context);
                     isOpenedMap = true;
                 }
             }

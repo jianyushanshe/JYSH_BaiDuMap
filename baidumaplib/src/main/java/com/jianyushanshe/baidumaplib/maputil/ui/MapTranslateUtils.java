@@ -97,10 +97,16 @@ public class MapTranslateUtils {
      * @return
      */
 
-    public static void openNaviByWeb(Activity context, NaviParaOption para) {
+    public static void openNaviByWeb(LatLng startla, LatLng endla, String startAdd, String endAdd, final Activity context) {
         if (hasBrowser(context)) {
-            BaiduMapNavigation.setSupportWebNavi(true);
-            BaiduMapNavigation.openBaiduMapNavi(para, context); //打开网页导航
+//            BaiduMapNavigation.setSupportWebNavi(true);
+//            BaiduMapNavigation.openBaiduMapNavi(para, context); //打开网页导航
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.VIEW");
+            // 驾车导航
+            intent.setData(Uri.parse("http://uri.amap.com/navigation?from=" + startla.longitude + "," + startla.latitude + "&to=" + endla.longitude + "," + endla.latitude + "&mode=car&src=nyx_super"));
+            context.startActivity(intent); // 启动调用
+
         } else {
             Toast.makeText(context, "抱歉，未检测到浏览器无法开启导航。", Toast.LENGTH_SHORT).show();
         }
