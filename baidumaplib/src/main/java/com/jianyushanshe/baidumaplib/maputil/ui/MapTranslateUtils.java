@@ -3,6 +3,7 @@ package com.jianyushanshe.baidumaplib.maputil.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -30,21 +31,36 @@ public class MapTranslateUtils {
     public static String GAODE_PACKNAME = "com.autonavi.minimap";//高德地图包名
     public static String TENGXUN_PACKNAME = "com.tencent.map";//腾讯地图包名
 
-
-    public static boolean isBaduInstalled; //百度地图是否已安装
-    public static boolean isGaodeInstalled; //高德地图是否已安装
-    public static boolean isTengxunInstalled; //腾讯地图是否已安装
-
-    static {
-        checkMapInastlled();
+    /**
+     * 百度地图是否安装
+     *
+     * @param context
+     * @return
+     */
+    public static boolean baiduIsInstalled(Context context) {
+        return isInstalled(context, BAIDU_PACKNAME);
     }
 
-
-    private static void checkMapInastlled() {
-        isBaduInstalled = isInstallByread(BAIDU_PACKNAME);
-        isGaodeInstalled = isInstallByread(GAODE_PACKNAME);
-        isTengxunInstalled = isInstallByread(TENGXUN_PACKNAME);
+    /**
+     * 高德地图是否安装
+     *
+     * @param context
+     * @return
+     */
+    public static boolean gaoDeIsInstalled(Context context) {
+        return isInstalled(context, GAODE_PACKNAME);
     }
+
+    /**
+     * 腾讯地图是否安装
+     *
+     * @param context
+     * @return
+     */
+    public static boolean tengXunIsInstalled(Context context) {
+        return isInstalled(context, TENGXUN_PACKNAME);
+    }
+
 
     /**
      * 判断是否安装目标应用
@@ -52,8 +68,17 @@ public class MapTranslateUtils {
      * @param packageName 目标应用安装后的包名
      * @return 是否已安装目标应用
      */
-    public static boolean isInstallByread(String packageName) {
-        return new File("/data/data/".concat(packageName)).exists();
+    private static boolean isInstalled(Context context, String packageName) {
+        PackageManager manager = context.getPackageManager();
+        //获取所有已安装程序的包信息
+        List<PackageInfo> installedPackages = manager.getInstalledPackages(0);
+        if (installedPackages != null) {
+            for (PackageInfo info : installedPackages) {
+                if (info.packageName.equals(packageName))
+                    return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -99,8 +124,6 @@ public class MapTranslateUtils {
 
     public static void openNaviByWeb(LatLng startla, LatLng endla, String startAdd, String endAdd, final Activity context) {
         if (hasBrowser(context)) {
-//            BaiduMapNavigation.setSupportWebNavi(true);
-//            BaiduMapNavigation.openBaiduMapNavi(para, context); //打开网页导航
             Intent intent = new Intent();
             intent.setAction("android.intent.action.VIEW");
             // 驾车导航
@@ -113,34 +136,26 @@ public class MapTranslateUtils {
     }
 
     /**
-     * 方法描述：打开浏览器
+     * 方法描述：打开百度地图客户端
      *
      * @param
      * @return
      */
     public static void openNaviByIntent(Activity context, NaviParaOption para) {
         //调起百度地图客户端
-        Intent intent;
-        try {
-            //结构说明地址 ：http://developer.baidu.com/map/uri-introandroid.htm
-            String url = addString("intent://map/direction?origin=latlng:",
-                    String.valueOf(para.getStartPoint().latitude), ",",
-                    String.valueOf(para.getStartPoint().longitude), "|name:", para.getStartName(),
-                    "&destination=latlng:",
-                    String.valueOf(para.getEndPoint().latitude), ",",
-                    String.valueOf(para.getEndPoint().longitude), "|name:", para.getEndName(),
-                    "&mode=driving#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end) ");
-//                            intent = Intent.getIntent("intent://map/direction?origin=latlng:34.264642646862,108.95108518068|name:我家&longitude:34.264642646862,108.95108518068&mode=driving®ion=西安&referer=Autohome|GasStation#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
-            Log.e("map", url);
-            intent = Intent.getIntent(url);
-            context.startActivity(intent); //启动调用
-//                Log.e("GasStation", "百度地图客户端已经安装");
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(context, "未知错误", Toast.LENGTH_SHORT).show();
-        }
+        Intent intent = new Intent();
+        String url = addString("baidumap://map/direction?origin=name:",
+                para.getStartName(), "|latlng:",
+                String.valueOf(para.getStartPoint().latitude), ",",
+                String.valueOf(para.getStartPoint().longitude),
+                "&destination=name:",
+                para.getEndName(), "|latlng:",
+                String.valueOf(para.getEndPoint().latitude), ",",
+                String.valueOf(para.getEndPoint().longitude),
+                "&coord_type=bd09ll&mode=driving&src=andr.haylion.maasCharge");
+        intent.setData(Uri.parse(url));
+        context.startActivity(intent); //启动调用
+
     }
 
     /**
