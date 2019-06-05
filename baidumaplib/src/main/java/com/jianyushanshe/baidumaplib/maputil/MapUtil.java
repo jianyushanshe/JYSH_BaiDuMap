@@ -113,7 +113,7 @@ public class MapUtil {
                 .endName(endAdd);
 
         if (MapTranslateUtils.baiduIsInstalled(context)) {
-            BaiduMapNavigation.openBaiduMapNavi(para, context);
+            openNaviByIntent(context, para);
         } else if (MapTranslateUtils.gaoDeIsInstalled(context)) {
             startNativeGaode(context, String.valueOf(baidu2Gao(endla).latitude), String.valueOf(baidu2Gao(endla).longitude), endAdd);
         } else {
